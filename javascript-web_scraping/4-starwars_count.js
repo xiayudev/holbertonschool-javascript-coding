@@ -13,7 +13,8 @@ request(url, function (error, response, body) {
     for (const result of results) {
       const characters = result.characters;
       for (const character of characters) {
-        if (character === 'https://swapi-api.hbtn.io/api/people/18/') {
+        const id = character.indexOf('18');
+        if (id !== -1) {
           counter++;
         }
       }
