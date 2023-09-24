@@ -19,6 +19,11 @@ request(url, function (error, response, body) {
         todosDone[id]++;
       }
     }
+    for (const key in todosDone) {
+      if (!todosDone[key]) {
+        delete todosDone[key];
+      }
+    }
     console.log(todosDone);
   }
 });
