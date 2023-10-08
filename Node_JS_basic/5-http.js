@@ -41,7 +41,7 @@ const app = http.createServer((req, res) => {
           res.end(`Internal Server Error: ${error.message}`);
         });
     } else {
-      res.end('This is the list of our students Cannot load the database');
+      res.end('This is the list of our students\nCannot load the database');
     }
   } else {
     res.statusCode = 500;
