@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+const countStudents = require('./3-read_file_async');
 
 const hostname = '127.0.0.1';
 const port = 1245;
@@ -10,23 +11,19 @@ const app = http.createServer((req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-
     if (process.argv.length > 2 && fs.existsSync(process.argv[2])) {
-      let students = [];
-      const out = [];
-      fs.readFile(process.argv[2], (error, data) => {
-        if (error) {
-          console.log(error);
-        } else {
-          students = data.toString().split('\n').map((elem) => elem.split(','));
-          students = students.slice(1, students.length - 1); // Array of array of students
+      countStudents(process.argv[2])
+        .then((data) => {
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'text/plain');
+          const students = data;
+          const out = [];
           const fields = {}; // All fields availables
           students.forEach((student) => {
             fields[student[student.length - 1]] = (fields[student[student.length - 1]] || 0) + 1;
           });
           // out.push('This is the list of our students');
+          out.push('This is the list of our students');
           out.push(`Number of students: ${students.length}`);
           for (const field in fields) {
             if (field) {
@@ -37,14 +34,19 @@ const app = http.createServer((req, res) => {
               out.push(`Number of students in ${field}: ${result.length}. List: ${result.join(', ')}`);
             }
           }
-        }
-        res.end(`${out.join('\n')}`);
-      });
+          res.end(`${out.join('\n')}`);
+        }).catch((error) => {
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'text/plain');
+          res.end(`Internal Server Error: ${error.message}`);
+        });
     } else {
       res.end('This is the list of our students Cannot load the database');
     }
   } else {
-    res.end('Invalid Request!');
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('This endpoint does not exists');
   }
 });
 
