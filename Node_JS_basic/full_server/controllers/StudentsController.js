@@ -1,28 +1,24 @@
-import readDatabase from "../utils";
 import * as fs from 'fs';
+import readDatabase from '../utils';
 
 const database = process.argv[2];
-export class StudentsController {
+export default class StudentsController {
   static getAllStudents(request, response) {
     if (fs.existsSync(database)) {
       readDatabase(database).then((data) => {
-        let totalStudents = 0;
         const out = [];
-        
+
+        out.push('This is the list of our students');
         for (const field in data) {
           if (field) {
-            totalStudents += data[field].length;
             out.push(`Number of students in ${field}: ${data[field].length}. List: ${data[field].join(', ')}`);
           }
         }
-        out.unshift(`Number of students: ${totalStudents}`);
-        out.unshift('This is the list of our students');
         response.setHeader('Content-Type', 'text/plain');
         response.status(200).send(`${out.join('\n')}`);
       }).catch((error) => {
-        response.statusCode = 500;
         response.setHeader('Content-Type', 'text/plain');
-        response.send(error.message);
+        response.status(500).send(error.message);
       });
     } else {
       response.setHeader('Content-Type', 'text/plain');
