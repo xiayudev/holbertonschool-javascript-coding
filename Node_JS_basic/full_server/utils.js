@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-export default function readDatabase(filePath) {
+function readDatabase(filePath) {
   return new Promise((resolve, reject) => {
     if (fs.existsSync(filePath)) {
       fs.readFile(filePath, (error, data) => {
@@ -31,3 +31,5 @@ export default function readDatabase(filePath) {
     }
   });
 }
+
+module.exports = readDatabase;

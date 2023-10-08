@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import readDatabase from '../utils';
 
 const database = process.argv[2];
-export default class StudentsController {
+class StudentsController {
   static getAllStudents(request, response) {
     if (fs.existsSync(database)) {
       readDatabase(database).then((data) => {
@@ -49,3 +49,5 @@ export default class StudentsController {
     }
   }
 }
+
+module.exports = StudentsController;
