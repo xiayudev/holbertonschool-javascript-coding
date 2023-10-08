@@ -1,5 +1,6 @@
-import * as fs from 'fs';
 import readDatabase from '../utils';
+
+const fs = require('fs');
 
 const database = process.argv[2];
 class StudentsController {
