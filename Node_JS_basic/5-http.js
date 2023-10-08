@@ -13,7 +13,7 @@ const app = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
 
-    if (process.argv[2] && fs.existsSync(process.argv[2])) {
+    if (process.argv.length > 2 && fs.existsSync(process.argv[2])) {
       let students = [];
       const out = [];
       fs.readFile(process.argv[2], (error, data) => {
@@ -38,12 +38,10 @@ const app = http.createServer((req, res) => {
             }
           }
         }
-        res.write(`${out.join('\n')}`);
-        res.end();
+        res.end(`${out.join('\n')}`);
       });
     } else {
-      res.write('This is the list of our students ');
-      res.end('Cannot load the database');
+      res.end('This is the list of our students Cannot load the database');
     }
   } else {
     res.end('Invalid Request!');
